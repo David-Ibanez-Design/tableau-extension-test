@@ -7,7 +7,7 @@
     <author name="David Ibanez" email="david@comvex.co.jp" organization="Comvex" website="https://comvex.co.jp"/>
     <min-api-version>1.4</min-api-version>
     <source-location>
-      <url>http://localhost:8765/test.html</url>
+      <url>https://david-ibanez-design.github.io/tableau-extension-test/test.html</url>
     </source-location>
     <icon>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==</icon>
     <permissions>
