@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest">
+  <dashboard-extension id="jp.co.comvex.digima.test" extension-version="0.1.0">
+    <default-locale>en_US</default-locale>
+    <name resource-id="name"/>
+    <description>Data read test</description>
+    <author name="David Ibanez" email="david@comvex.co.jp" organization="Comvex" website="https://comvex.co.jp"/>
+    <min-api-version>1.4</min-api-version>
+    <source-location>
+      <url>http://localhost:8765/test.html</url>
+    </source-location>
+    <icon>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==</icon>
+    <permissions>
+      <permission>full data</permission>
+    </permissions>
+  </dashboard-extension>
+  <resources>
+    <resource id="name"><text locale="en_US">Data test</text></resource>
+  </resources>
+</manifest>

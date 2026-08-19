@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tableau data read test</title>
+  <style>
+    body { font-family: sans-serif; margin: 12px; font-size: 13px; }
+    table { border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #999; padding: 4px 8px; text-align: left; }
+    #error { color: #b00020; white-space: pre-wrap; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/gh/tableau/extensions-api/lib/tableau.extensions.1.latest.js"></script>
+</head>
+<body>
+  <h3>Worksheet data read test</h3>
+  <div id="status">Initializing…</div>
+  <div id="error"></div>
+  <div id="output"></div>
+
+  <script>
+    function showError(msg) {
+      document.getElementById('status').textContent = 'Failed.';
+      document.getElementById('error').textContent = String(msg);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof tableau === 'undefined' || !tableau.extensions) {
+        showError('Tableau Extensions API library did not load.');
+        return;
+      }
+
+      tableau.extensions.initializeAsync().then(function () {
+        var dashboard = tableau.extensions.dashboardContent.dashboard;
+        var worksheet = dashboard.worksheets.find(function (ws) {
+          return ws.name === 'data';
+        });
+
+        if (!worksheet) {
+          var names = dashboard.worksheets.map(function (ws) { return ws.name; }).join(', ');
+          showError('No worksheet named "data" found on this dashboard. ' +
+                    'Worksheets present: ' + (names || '(none)'));
+          return;
+        }
+
+        document.getElementById('status').textContent =
+          'Found worksheet "' + worksheet.name + '". Reading summary data…';
+
+        return worksheet.getSummaryDataAsync().then(function (dataTable) {
+          var out = document.getElementById('output');
+          var fieldNames = dataTable.columns.map(function (c) { return c.fieldName; });
+
+          var html = '';
+          html += '<p><b>Worksheet:</b> ' + worksheet.name + '</p>';
+          html += '<p><b>Row count:</b> ' + dataTable.totalRowCount + '</p>';
+          html += '<p><b>Columns:</b> ' + fieldNames.join(', ') + '</p>';
+
+          html += '<table><thead><tr>';
+          fieldNames.forEach(function (f) { html += '<th>' + f + '</th>'; });
+          html += '</tr></thead><tbody>';
+
+          dataTable.data.slice(0, 5).forEach(function (row) {
+            html += '<tr>';
+            row.forEach(function (cell) { html += '<td>' + cell.value + '</td>'; });
+            html += '</tr>';
+          });
+
+          html += '</tbody></table>';
+          out.innerHTML = html;
+          document.getElementById('status').textContent = 'Success.';
+        });
+      }).catch(function (err) {
+        showError(err && err.message ? err.message : err);
+      });
+    });
+  </script>
+</body>
+</html>
